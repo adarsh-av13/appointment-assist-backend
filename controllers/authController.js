@@ -1,5 +1,5 @@
-const authService = require('../services/auth');
-const User = require('../models/user');
+const authService = require('../services/authService');
+const User = require('../models/userModel');
 
 const registerUser = async(req, res) => {
     let username = req.body.username;
@@ -15,6 +15,15 @@ const registerUser = async(req, res) => {
     }).catch((err) => console.log(err));
 }
 
+const isAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        res.status(401).json({ msg: 'You are not authenticated' });
+    }
+}
+
 module.exports = {
     registerUser,
+    isAuthenticated
 }

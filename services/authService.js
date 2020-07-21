@@ -8,6 +8,12 @@ const generateHash = async(pwd) => {
     return { hash, salt };
 }
 
+const validatePassword = async(pwd, hash, salt) => {
+    let isValid = await bcrypt.compare(pwd, hash);
+    return isValid;
+}
+
 module.exports = {
     generateHash,
+    validatePassword
 }
