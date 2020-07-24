@@ -4,8 +4,13 @@ const localStategy = require('passport-local').Strategy;
 const authService = require('../services/authService')
 
 
-let verifyCallback = (username, password, done) => {
-    User.findOne({ username: username })
+let customCreds = {
+    usernameField: 'email',
+    passwordField: 'password'
+}
+
+let verifyCallback = (email, password, done) => {
+    User.findOne({ email: email })
         .then(async(user) => {
 
             if (!user) { return done(null, false) }
