@@ -34,7 +34,15 @@ const cancelAppointment = (req, res, next) => {
         }).catch((err) => next(err));
 }
 
+const getAppointmentsForConsultant = (req, res, next) => {
+    appointmentModel.find({ consultant_id: req.body.consultant_id })
+        .then((appointments) => {
+            res.status(200).json(appointments);
+        }).catch((err) => next(err));
+}
+
 module.exports = {
     makeAppointment,
     cancelAppointment,
+    getAppointmentsForConsultant,
 }
