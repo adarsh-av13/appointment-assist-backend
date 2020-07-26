@@ -8,10 +8,9 @@ const consultantSchema = new Schema({
     display_picture: String,
     phone_no: String,
     address: String,
-    days_active: Array,
-    slots: Number,
-    start_time: Array,
-    end_time: Array
+    active_days: Array,
+    start_time: Date,
+    end_time: Date
 });
 
 const Consultant = mongoose.model('Consultant', consultantSchema);

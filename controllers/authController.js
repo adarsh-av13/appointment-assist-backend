@@ -1,7 +1,6 @@
 const authService = require('../services/authService');
 const User = require('../models/userModel');
 const Consultant = require('../models/consultantModel');
-const assert = require('assert');
 
 const registerUser = async(req, res, next) => {
     let email = req.body.email;

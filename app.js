@@ -4,6 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const connection = require('./config/databaseConfig');
 const authRouter = require('./routes/authRoute');
+const appointmentRouter = require('./routes/appointmentRoute');
 const passport = require('./config/passportConfig');
 const app = express();
 require('dotenv').config();
@@ -36,7 +37,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', authRouter);
-// app.use('/', indexRouter);
+app.use('/appointments', appointmentRouter);
 
 connection.once("open", () => {
     console.log("MongoDB database connection established successfully");
