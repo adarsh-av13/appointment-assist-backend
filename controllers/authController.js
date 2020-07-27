@@ -21,7 +21,8 @@ const registerUser = async(req, res, next) => {
                     role: 'USER'
                 }).then((user) => {
                     Consultant.create({
-                        user_id: user.id
+                        user_id: user.id,
+                        profile_built: false,
                     }).then((_) => {
                         return res.status(200).json({
                             registration: 'success'

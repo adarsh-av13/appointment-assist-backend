@@ -4,6 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const connection = require('./config/databaseConfig');
 const authRouter = require('./routes/authRoute');
+const consultantRouter = require('./routes/consultantRoute');
 const appointmentRouter = require('./routes/appointmentRoute');
 const passport = require('./config/passportConfig');
 const app = express();
@@ -37,6 +38,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', authRouter);
+app.use('/consultant', (req, res, next) => {
+        console.log("DSFS");
+        next();
+    },
+    consultantRouter);
 app.use('/appointments', appointmentRouter);
 
 connection.once("open", () => {
