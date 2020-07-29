@@ -1,42 +1,26 @@
 const passport = require('passport');
 const User = require('../models/userModel');
-const localStategy = require('passport-local').Strategy;
-const authService = require('../services/authService')
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJWT = require('passport-jwt').ExtractJwt;
 
-
-let customCreds = {
-    usernameField: 'email',
-    passwordField: 'password'
+require('dotenv').config();
+const opts = {
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.JWT_SECRET
 }
 
-let verifyCallback = (email, password, done) => {
-    User.findOne({ email: email })
-        .then(async(user) => {
-
-            if (!user) { return done(null, false) }
-            let isValid = await authService.validatePassword(password, user.hashpwd, user.salt);
-            if (isValid) {
-                return done(null, user);
-            } else {
-                return done(null, false);
-            }
+let verifyCallback = async(jwtPayload, done) => {
+    return User.findById(jwtPayload.id)
+        .then(user => {
+            return done(null, user);
         })
-        .catch((err) => {
-            done(err);
+        .catch(err => {
+            return done(err);
         });
 }
-let strategy = new localStategy(verifyCallback);
 
-passport.use(strategy);
+let jwtStrategy = new JwtStrategy(opts, verifyCallback);
 
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => {
-        done(err, user);
-    });
-})
+passport.use(jwtStrategy);
 
 module.exports = passport;

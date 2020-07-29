@@ -9,9 +9,9 @@ router.get('/login', (req, res) => {
     res.send('HI');
 });
 
-router.post('/login', passport.authenticate('local', { successRedirect: '/login-success', failureRedirect: '/login-failure' }));
+router.post('/login', authController.loginUser);
 
-router.get('/', authController.isAuthenticated, (req, res) => res.send("Hello There"));
+router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => res.send("Hello There"));
 
 router.post('/logout', (req, res) => {
     req.logOut();

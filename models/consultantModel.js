@@ -11,7 +11,6 @@ const consultantSchema = new Schema({
     active_days: Array,
     start_time: Date,
     end_time: Date,
-    profile_built: Boolean
 });
 
 const Consultant = mongoose.model('Consultant', consultantSchema);

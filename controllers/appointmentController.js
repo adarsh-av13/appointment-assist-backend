@@ -35,7 +35,7 @@ const cancelAppointment = async(req, res, next) => {
         next(err);
     }
     appointment.save()
-        .then((appointment) => {
+        .then((_appointment) => {
             res.status(200).json({
                 error: false,
                 msg: 'Cancellation Successful'

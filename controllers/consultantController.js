@@ -1,4 +1,5 @@
 const Consultant = require('../models/consultantModel');
+const User = require('../models/userModel');
 
 const editProfile = (req, res, next) => {
     Consultant.findOne({ user_id: req.params.id }).then((consultant) => {
@@ -8,12 +9,18 @@ const editProfile = (req, res, next) => {
         consultant.phone_no = req.body.phone_no === undefined ? consultant.phone_no : req.body.phone_no;
         consultant.address = req.body.address === undefined ? consultant.address : req.body.address;
         consultant.active_days = req.body.active_days === undefined ? consultant.active_days : req.body.active_days;
-        consultant.profile_built = true;
-        // start_time: req.body.start_time === undefined ? consultant.start_time : req.body.start_time,
-        // end_time: req.body.end_time === undefined ? consultant.end_time : req.body.end_time,
-
+        consultant.start_time = req.body.start_time === undefined ? consultant.start_time : req.body.start_time;
+        consultant.end_time = req.body.end_time === undefined ? consultant.end_time : req.body.end_time;
         consultant.save().then((consultant) => {
-            res.json(consultant);
+            User.findOne({ _id: req.params.id }).then((user) => {
+                user.profile_setup = true;
+                user.save().then((user) => {
+                    res.json({
+                        error: false,
+                        msg: 'Editing Successful'
+                    });
+                }).catch(err => next(err));
+            }).catch(err => next(err));
         }).catch((err) => next(err));
     }).catch((err) => next(err));
 }
@@ -26,7 +33,6 @@ const getProfile = (req, res, next) => {
                 msg: 'Requested resource does not exist'
             });
         }
-        console.log(consultant.first_name);
         res.status(200).json(consultant);
     }).catch((err) => next(err));
 }
