@@ -8,6 +8,8 @@ const editProfile = (req, res, next) => {
         consultant.display_picture = req.body.display_picture === undefined ? consultant.display_picture : req.body.display_picture;
         consultant.phone_no = req.body.phone_no === undefined ? consultant.phone_no : req.body.phone_no;
         consultant.address = req.body.address === undefined ? consultant.address : req.body.address;
+        consultant.field = req.body.field === undefined ? consultant.field : req.body.field;
+        consultant.profile_setup = true;
         consultant.active_days = req.body.active_days === undefined ? consultant.active_days : req.body.active_days;
         consultant.start_time = req.body.start_time === undefined ? consultant.start_time : req.body.start_time;
         consultant.end_time = req.body.end_time === undefined ? consultant.end_time : req.body.end_time;
@@ -38,7 +40,7 @@ const getProfile = (req, res, next) => {
 }
 
 const getAllProfiles = (req, res, next) => {
-    Consultant.find({ profile_built: true }).then((consultants) => {
+    Consultant.find({ profile_setup: true }).then((consultants) => {
         console.log(consultants);
         res.status(200).json(consultants);
     }).catch((err) => next(err));
