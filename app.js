@@ -13,7 +13,7 @@ require('dotenv').config();
 
 let origin;
 if (process.env.NODE_ENV === 'production')
-    origin = 'https://appointment-assist.netlify.app/';
+    origin = 'https://appointment-assist.netlify.app';
 else
     origin = 'http://localhost:8081';
 
