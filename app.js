@@ -27,6 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
 
+app.options('*', cors());
 app.use('/', authRouter);
 app.use('/consultants', consultantRouter);
 app.use('/appointments', appointmentRouter);
