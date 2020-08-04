@@ -12,7 +12,7 @@ const app = express();
 require('dotenv').config();
 
 app.use(cors({
-    origin: ['http://localhost:8082', 'http://localhost:8081']
+    origin: ['https://appointment-assist.netlify.app/', 'http://localhost:8082', 'http://localhost:8081']
 }));
 
 app.use(morgan('dev'));
@@ -31,5 +31,5 @@ connection.once("open", () => {
 
 const port = process.env.PORT;
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:3000`);
+    console.log(`Server running`);
 });
