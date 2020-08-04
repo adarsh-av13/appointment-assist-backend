@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 dotenv.config();
-const uri = process.env.TEST_DB;
+let uri;
+if (process.env.NODE_ENV == 'development')
+    uri = process.env.TEST_DB;
+else
+    uri = process.env.DB;
 
 mongoose.connect(uri, {
     useUnifiedTopology: true,
