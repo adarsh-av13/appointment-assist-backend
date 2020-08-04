@@ -11,8 +11,14 @@ const app = express();
 
 require('dotenv').config();
 
+let origin;
+if (process.env.NODE_ENV === 'production')
+    origin = 'https://appointment-assist.netlify.app/';
+else
+    origin = 'http://localhost:8081';
+
 app.use(cors({
-    origin: ['https://appointment-assist.netlify.app/', 'http://localhost:8082', 'http://localhost:8081']
+    origin: origin,
 }));
 
 app.use(morgan('dev'));
