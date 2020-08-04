@@ -1,16 +1,26 @@
 const Appointment = require('../models/appointmentModel');
+const Token = require('../models/tokenModel');
 
 const makeAppointment = async(req, res, next) => {
     let newAppointment;
+    let token = await Token.findOne({ consultant_id: req.body.consultant_id, date: req.body.date });
+    if (token === null) {
+        token = new Token({
+            consultant_id: req.body.consultant_id,
+            date: req.body.date,
+            count: 0
+        });
+    }
+    token.count++;
     try {
         newAppointment = await Appointment.create({
             consultant_id: req.body.consultant_id,
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             email: req.body.email,
-            phoneNo: req.body.phoneNo,
-            tokenNo: req.body.tokenNo,
-            date: Date.now(),
+            phone_no: req.body.phone_no,
+            token_no: token.count,
+            date: req.body.date,
             status: 'pending'
         });
     } catch (err) {
@@ -18,13 +28,15 @@ const makeAppointment = async(req, res, next) => {
     }
 
     newAppointment.save().then((appointment) => {
-        res.status(200).json({
-            error: false,
-            msg: 'Booking Successful',
-            ...appointment
-        });
-    }).catch((err) => next(err));
-}
+        token.save().then((token) => {
+            res.status(200).json({
+                error: false,
+                msg: 'Booking Successful',
+                ...appointment
+            });
+        }).catch((err) => next(err));
+    }).catch((err) => next(err))
+};
 
 const cancelAppointment = async(req, res, next) => {
     let appointment;
@@ -46,6 +58,7 @@ const cancelAppointment = async(req, res, next) => {
 const getAppointmentsForConsultant = (req, res, next) => {
     Appointment.find({ consultant_id: req.params.id })
         .then((appointments) => {
+            console.log(appointments);
             res.status(200).json(appointments);
         }).catch((err) => next(err));
 }
